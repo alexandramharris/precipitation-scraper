@@ -59,6 +59,9 @@ colnames(scraper)[12] = "Unit"
 colnames(scraper)[13] = "Method"
 colnames(scraper)[14] = "Measurement"
 
+# Move inches to end
+scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, Inches, Unit)
+
 # Format date
 scraper$Date <- as.Date(scraper$Date , format = "%m/%d/%Y")
 

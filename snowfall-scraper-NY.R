@@ -78,6 +78,15 @@ Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery
 
 # Move inches to end
 scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
+
+# Create daily dataset
+daily <- scraper %>% 
+  filter(Measurement == "24-hourly Snowfall")
+
+# Create storm total dataset
+storm <- scraper %>% 
+  filter(Measurement == "Storm Total Snow")
+
   
 # Export ----
 
@@ -86,5 +95,8 @@ gs4_auth()
 1
 
 # Export scraper data to Google Sheet
-sheet_write(scraper, ss = "LINK GOES HERE", sheet = "scraper")
+sheet_write(storm, ss = "LINK GOES HERE", sheet = "storm")
+
+# Export daily data to Google Sheet
+sheet_write(daily, ss = "LINK GOES HERE", sheet = "daily")
 

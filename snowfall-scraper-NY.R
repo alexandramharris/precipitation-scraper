@@ -63,7 +63,7 @@ colnames(scraper)[14] = "Measurement"
 scraper$Date <- as.Date(scraper$Date , format = "%m/%d/%Y")
 
 # Add day of week
-scraper$Weekday <- weekdays(scraper$Date) 
+scraper$`Day reported` <- weekdays(scraper$Date) 
 
 # Format time
 # tk
@@ -77,8 +77,8 @@ scraper <- scraper %>%
 Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery" | County == "Fulton" | County == "Hamilton"))
 
 # Move inches to end
-scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, Day, Inches, Unit)
-
+scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
+  
 # Export ----
 
 # Check authorized users and authorize account
@@ -87,3 +87,4 @@ gs4_auth()
 
 # Export scraper data to Google Sheet
 sheet_write(scraper, ss = "LINK GOES HERE", sheet = "scraper")
+

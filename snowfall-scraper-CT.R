@@ -1,7 +1,13 @@
 # Snow totals for CT ----
 # Alexandra Harris
 
-# Source: https://forecast.weather.gov/product.php?site=ALY&issuedby=ALY&product=PNS&format=ci
+# Sources:
+
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=ci&version=1&glossary=1&highlight=off
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=OKX&product=PNS&format=ci&version=1&glossary=1&highlight=off
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=BOX&product=PNS&format=ci&version=1&glossary=1&highlight=off
+
+# Updates to make: add a for loop to iterate over each link, accounting for differences in comma separation on the location column
 
 
 # Set up ----
@@ -15,7 +21,8 @@ library(lubridate)
 # Scraper ----
 
 # Read webpage
-webpage <- read_html("https://forecast.weather.gov/product.php?site=ALY&issuedby=ALY&product=PNS&format=ci")
+webpage <- read_html("https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=ci&version=1&glossary=1&highlight=off
+")
 
 # Select element
 metadata_nodes <- html_nodes(webpage, "pre.glossaryProduct")

@@ -94,7 +94,7 @@ storm <- scraper %>%
 gs4_auth()
 1
 
-# Export scraper data to Google Sheet
+# Export storm data to Google Sheet
 sheet_write(storm, ss = "LINK GOES HERE", sheet = "storm")
 
 # Export daily data to Google Sheet

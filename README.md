@@ -4,4 +4,4 @@
 
 <p>Added version for Connecticut market.</p>
 
-<p>TK: setting up cron job and some format updates.</p>
+<p>TK: some format updates.</p>

@@ -100,3 +100,20 @@ sheet_write(storm, ss = "LINK GOES HERE", sheet = "storm")
 # Export daily data to Google Sheet
 sheet_write(daily, ss = "LINK GOES HERE", sheet = "daily")
 
+
+# Cron job ----
+
+# Run in terminal:
+
+# crontab -e
+# i
+# */5 * * * * PATH
+# ESC
+# :wq
+
+
+# Check:
+
+# ps aux | grep "Rscript PATH"
+
+

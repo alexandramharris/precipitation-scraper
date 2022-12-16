@@ -118,11 +118,6 @@ sheet_write(daily, ss = "LINK HERE", sheet = "daily")
 
 # crontab -e
 # i
-# */5 * * * * alexandraharris Rscript PATH
+# * * * * * Rscript PATH
 # ESC
 # :wq
-
-
-# Check:
-
-# ps aux | grep "Rscript PATH"

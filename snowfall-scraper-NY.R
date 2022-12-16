@@ -76,6 +76,9 @@ scraper <- scraper %>%
   filter(!is.na(County) & (County == "Albany" | County == "Saratoga" | County == "Schenectady" | County == "Rensselaer" | County == "Greene" | County == "Ulster" | County == "Delaware" | County == "Sullivan" | County == "Columbia" | County == "Greene" | County == "Dutchess" | County == "Putnam" | County == "Orange" | County == "
 Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery" | County == "Fulton" | County == "Hamilton"))
 
+# Trim numbers after location name
+scraper$Location <- sub("\\d.*", "", scraper$Location)
+
 # Move inches to end
 scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
 
@@ -87,7 +90,7 @@ daily <- scraper %>%
 storm <- scraper %>% 
   filter(Measurement == "Storm Total Snow")
 
-  
+
 # Export ----
 
 # Check authorized users and authorize account

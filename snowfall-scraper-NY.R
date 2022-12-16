@@ -112,12 +112,29 @@ sheet_write(storm, ss = "LINK HERE", sheet = "storm")
 sheet_write(daily, ss = "LINK HERE", sheet = "daily")
 
 
-# Cron job ----
+# Schedule with Launchd (Mac) ----
+
+# Save as .plist:
+  # <?xml version="1.0" encoding="UTF-8"?>
+  # <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  # <plist version="1.0">
+  # <dict>
+  # <key>Label</key>
+  # <string>com.nws-snowfall-scraper</string>
+  # <key>ProgramArguments</key>
+  # <array>
+  # <string>/usr/local/bin/Rscript</string>
+  # <string>/Users/PATH HERE</string>
+  # </array>
+  # <key>StartInterval</key>
+  # <integer>60</integer>
+  # </dict>
+  # </plist>
+
+# Save to /Libary/LaunchDaemons
 
 # Run in terminal:
+  # launchctl load /Library/LaunchAgents/com.nws-snowfall-scraper.plist
 
-# crontab -e
-# i
-# * * * * * Rscript PATH
-# ESC
-# :wq
+# Check:
+  # launchctl list

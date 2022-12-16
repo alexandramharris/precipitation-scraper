@@ -128,6 +128,10 @@ sheet_write(daily, ss = "LINK HERE", sheet = "daily")
   # </array>
   # <key>StartInterval</key>
   # <integer>60</integer>
+  # <key>KeepAlive</key>
+  # <true/>
+  # <key>PowerType</key>
+  # <string>ACPower</string>
   # </dict>
   # </plist>
 

@@ -115,11 +115,11 @@ sheet_write(daily, ss = "LINK HERE", sheet = "daily")
 
 # crontab -e
 # i
-# */5 * * * * alexandraharris Rscript /Users/alexandraharris/Documents/GitHub_Projects/snowfall-scraper
+# */5 * * * * alexandraharris Rscript PATH
 # ESC
 # :wq
 
 
 # Check:
 
-# ps aux | grep "Rscript /Users/alexandraharris/Documents/GitHub_Projects/snowfall-scraper"
+# ps aux | grep "Rscript PATH"

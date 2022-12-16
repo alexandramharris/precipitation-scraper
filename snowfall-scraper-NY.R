@@ -91,14 +91,22 @@ storm <- scraper %>%
 # Export ----
 
 # Check authorized users and authorize account
-gs4_auth()
-1
+# gs4_auth()
+# 1
+
+# Set gs4_auth_input to 1
+assign("gs4_auth_input", 1, envir = .GlobalEnv)
+
+# Modify gs4_auth()
+gs4_auth <- function(input = gs4_auth_input) {
+  gs4_auth()
+}
 
 # Export storm data to Google Sheet
-sheet_write(storm, ss = "LINK GOES HERE", sheet = "storm")
+sheet_write(storm, ss = "LINK HERE", sheet = "storm")
 
 # Export daily data to Google Sheet
-sheet_write(daily, ss = "LINK GOES HERE", sheet = "daily")
+sheet_write(daily, ss = "LINK HERE", sheet = "daily")
 
 
 # Cron job ----
@@ -107,13 +115,11 @@ sheet_write(daily, ss = "LINK GOES HERE", sheet = "daily")
 
 # crontab -e
 # i
-# */5 * * * * PATH
+# */5 * * * * alexandraharris Rscript /Users/alexandraharris/Documents/GitHub_Projects/snowfall-scraper
 # ESC
 # :wq
 
 
 # Check:
 
-# ps aux | grep "Rscript PATH"
-
-
+# ps aux | grep "Rscript /Users/alexandraharris/Documents/GitHub_Projects/snowfall-scraper"

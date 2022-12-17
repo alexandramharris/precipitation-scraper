@@ -93,10 +93,6 @@ storm <- scraper %>%
 
 # Export ----
 
-# Check authorized users and authorize account
-# gs4_auth()
-# 1
-
 # Set gs4_auth_input to 1
 assign("gs4_auth_input", 1, envir = .GlobalEnv)
 

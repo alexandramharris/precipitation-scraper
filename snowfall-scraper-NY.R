@@ -138,7 +138,7 @@ sheet_write(daily, ss = "LINK HERE", sheet = "daily")
 # Save to /Libary/LaunchDaemons
 
 # Run in terminal:
-  # launchctl load /Library/LaunchAgents/com.nws-snowfall-scraper.plist
+  # sudo launchctl load /Library/LaunchDaemons/com.nws-snowfall-scraper.plist
 
 # Check:
   # launchctl list

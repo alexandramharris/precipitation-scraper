@@ -93,13 +93,16 @@ storm <- scraper %>%
 
 # Export ----
 
+# Authorize
+gs4_auth("email")
+
 # Set gs4_auth_input to 1
-assign("gs4_auth_input", 1, envir = .GlobalEnv)
+# assign("gs4_auth_input", 1, envir = .GlobalEnv)
 
 # Modify gs4_auth()
-gs4_auth <- function(input = gs4_auth_input) {
-  gs4_auth()
-}
+# gs4_auth <- function(input = gs4_auth_input) {
+#  gs4_auth()
+#}
 
 # Export storm data to Google Sheet
 sheet_write(storm, ss = "LINK HERE", sheet = "storm")

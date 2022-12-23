@@ -50,8 +50,8 @@ colnames(scraper)[2] = "Time"
 colnames(scraper)[3] = "State"
 colnames(scraper)[4] = "County"
 colnames(scraper)[5] = "Location"
-colnames(scraper)[6] = "Unknown"
-colnames(scraper)[7] = "Unknown2"
+colnames(scraper)[6] = "Location 2"
+colnames(scraper)[7] = "Location 3"
 colnames(scraper)[8] = "Latitude"
 colnames(scraper)[9] = "Longitude"
 colnames(scraper)[10] = "Precipitation"
@@ -67,10 +67,12 @@ scraper$Date <- as.Date(scraper$Date , format = "%m/%d/%Y")
 scraper$`Day reported` <- weekdays(scraper$Date) 
 
 # Format time
-# tk
-
-# Concatenate day and time
-# tk
+scraper$Time <- sub("^([0-9]{3}) ", "0\\1 ", scraper$Time)
+scraper$Time <- strptime(scraper$Time, format = "%I%M %p")
+scraper$Time <- strftime(scraper$Time, format = "%I:%M %p")
+scraper$Time <- sub("^0", "", scraper$Time)
+scraper$Time <- gsub("AM", "a.m.", scraper$Time)
+scraper$Time <- gsub("PM", "p.m.", scraper$Time)
 
 # Filter for counties
 scraper <- scraper %>% 
@@ -78,7 +80,7 @@ scraper <- scraper %>%
 Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery" | County == "Fulton" | County == "Hamilton"))
 
 # Move inches to end
-scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
+scraper <- select(scraper, Date, Time, State, County, Location, `Location 2`, `Location 3`, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
 
 # Trim numbers after location name
 scraper$Location <- sub("\\d.*", "", scraper$Location)
@@ -99,7 +101,7 @@ rain_daily <- scraper %>%
 rain_storm <- scraper %>% 
   filter(Measurement == "Storm Total Rainfall")
 
-  
+
 # Export ----
 
 # Authorize
@@ -116,7 +118,6 @@ sheet_write(rain_storm, ss = "link", sheet = "rain_storm")
 
 # Export daily rain data to Google Sheet
 sheet_write(rain_daily, ss = "link", sheet = "rain_daily")
-
 
 
 # Schedule with Launchd (Mac) ----

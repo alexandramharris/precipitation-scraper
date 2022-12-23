@@ -1,4 +1,4 @@
-# Snow totals ----
+# Precipitation Scraper ----
 # Alexandra Harris
 
 # Source: https://forecast.weather.gov/product.php?site=ALY&issuedby=ALY&product=PNS&format=ci

@@ -1,4 +1,4 @@
-# snowfall-scraper
+# precipitation-scraper
 
 <p>Scrapes snowfall data for Capital Region and Hudson Valley area. Links to a Google Sheet used to power Datawrapper graphics.</p>
 

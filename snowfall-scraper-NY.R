@@ -12,6 +12,7 @@ library(tidyr)
 library(googlesheets4)
 library(lubridate)
 
+
 # Scraper ----
 
 # Read webpage
@@ -76,39 +77,46 @@ scraper <- scraper %>%
   filter(!is.na(County) & (County == "Albany" | County == "Saratoga" | County == "Schenectady" | County == "Rensselaer" | County == "Greene" | County == "Ulster" | County == "Delaware" | County == "Sullivan" | County == "Columbia" | County == "Greene" | County == "Dutchess" | County == "Putnam" | County == "Orange" | County == "
 Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery" | County == "Fulton" | County == "Hamilton"))
 
-# Trim numbers after location name
-scraper$Location <- sub("\\d.*", "", scraper$Location)
-
 # Move inches to end
 scraper <- select(scraper, Date, Time, State, County, Location, Unknown, Unknown2, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Inches, Unit)
 
+# Trim numbers after location name
+scraper$Location <- sub("\\d.*", "", scraper$Location)
+
 # Create daily dataset
-daily <- scraper %>% 
+snow_daily <- scraper %>% 
   filter(Measurement == "24-hourly Snowfall")
 
 # Create storm total dataset
-storm <- scraper %>% 
+snow_storm <- scraper %>% 
   filter(Measurement == "Storm Total Snow")
 
+# Create daily rainfall dataset
+rain_daily <- scraper %>% 
+  filter(Measurement == "24-hourly Rainfall")
 
+# Create storm rainfall total dataset
+rain_storm <- scraper %>% 
+  filter(Measurement == "Storm Total Rainfall")
+
+  
 # Export ----
 
 # Authorize
-gs4_auth("email")
+gs4_auth("alexandra.harris@timesunion.com")
 
-# Set gs4_auth_input to 1
-# assign("gs4_auth_input", 1, envir = .GlobalEnv)
+# Export snow storm data to Google Sheet
+sheet_write(snow_storm, ss = "link", sheet = "snow_storm")
 
-# Modify gs4_auth()
-# gs4_auth <- function(input = gs4_auth_input) {
-#  gs4_auth()
-#}
+# Export daily snow data to Google Sheet
+sheet_write(snow_daily, ss = "link", sheet = "snow_daily")
 
-# Export storm data to Google Sheet
-sheet_write(storm, ss = "LINK HERE", sheet = "storm")
+# Export rain storm data to Google Sheet
+sheet_write(rain_storm, ss = "link", sheet = "rain_storm")
 
-# Export daily data to Google Sheet
-sheet_write(daily, ss = "LINK HERE", sheet = "daily")
+# Export daily rain data to Google Sheet
+sheet_write(rain_daily, ss = "link", sheet = "rain_daily")
+
 
 
 # Schedule with Launchd (Mac) ----

@@ -77,12 +77,16 @@ scraper$Time <- gsub("PM", "p.m.", scraper$Time)
 # Concatenate day and time
 scraper$Reported <- paste(scraper$`Day reported`, scraper$Time)
 
+# Format daily dates and times
+scraper$`Daily date` <- format(as.Date(scraper$Date, "%Y-%m-%d"), "%b. %d")
+scraper$`Date reported` <- paste(scraper$`Daily date`, "at", scraper$Time)
+
 # Filter for counties
 scraper <- scraper %>% 
   filter(!is.na(County) & (County == "Albany" | County == "Saratoga" | County == "Schenectady" | County == "Rensselaer" | County == "Greene" | County == "Ulster" | County == "Delaware" | County == "Sullivan" | County == "Columbia" | County == "Greene" | County == "Dutchess" | County == "Putnam" | County == "Orange" | County == "Washington" | County == "Warren" | County == "Schoharie" | County == "Montgomery" | County == "Fulton" | County == "Hamilton"))
 
 # Move inches to end
-scraper <- select(scraper, Date, Time, State, County, Location, `Location 2`, `Location 3`, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Reported, Inches, Unit)
+scraper <- select(scraper, Date, Time, State, County, Location, `Location 2`, `Location 3`, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Reported,`Daily date`, `Date reported`, Inches, Unit)
 
 # Trim numbers after location name
 scraper$Location <- sub("\\d.*", "", scraper$Location)
@@ -103,7 +107,7 @@ rain_daily <- scraper %>%
 rain_storm <- scraper %>% 
   filter(Measurement == "Storm Total Rainfall")
 
-
+  
 # Export ----
 
 # Authorize

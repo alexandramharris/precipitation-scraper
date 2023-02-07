@@ -157,6 +157,174 @@ if (nrow(rain_daily)) {
 }
 
 
+
+# Connecticut version ----
+
+# Sources:
+
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=ci&version=1&glossary=1&highlight=off
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=OKX&product=PNS&format=ci&version=1&glossary=1&highlight=off
+# https://forecast.weather.gov/product.php?site=NWS&issuedby=BOX&product=PNS&format=ci&version=1&glossary=1&highlight=off
+
+
+# Scraper ----
+
+# Set source links
+links <- c("https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=ci&version=1&glossary=1&highlight=off", 
+           "https://forecast.weather.gov/product.php?site=NWS&issuedby=OKX&product=PNS&format=ci&version=1&glossary=1&highlight=off", 
+           "https://forecast.weather.gov/product.php?site=NWS&issuedby=BOX&product=PNS&format=ci&version=1&glossary=1&highlight=off")
+
+# Initialize dataframes
+ct_snow_daily <- data.frame()
+ct_snow_storm <- data.frame()
+ct_rain_daily <- data.frame()
+ct_rain_storm <- data.frame()
+
+# Iterate over source links
+for(i in 1:length(links)){
+  # Read webpage
+  ct_webpage <- read_html(links[i])
+  
+  # Select element
+  ct_metadata_nodes <- html_nodes(ct_webpage, "pre.glossaryProduct")
+  
+  # Trim as text
+  ct_metadata_text <- str_trim(ct_metadata_nodes)
+  
+  # Convert to dataframe
+  ct_metadata_df <- as.data.frame(ct_metadata_text)
+  
+  # Extract below metadata text only
+  ct_metadata <- as.data.frame(gsub(".*\\*\\*\\*\\*\\*METADATA\\*\\*\\*\\*\\*", "", ct_metadata_df$ct_metadata_text))
+  
+  # Rename 
+  colnames(ct_metadata)[1] = "col"
+  
+  # Separate
+  ct_scraper <- ct_metadata %>% 
+    separate_rows(col, sep=":") %>% 
+    separate(col, paste('col', 1:14, sep=":"), sep=",", extra="drop")
+  
+  # Drop blank rows
+  ct_scraper <- ct_scraper %>% drop_na
+  
+  # Clean white space
+  ct_scraper <- ct_scraper %>% mutate_all(funs(trimws))
+  
+  # Rename columns
+  colnames(ct_scraper)[1] = "Date"
+  colnames(ct_scraper)[2] = "Time"
+  colnames(ct_scraper)[3] = "State"
+  colnames(ct_scraper)[4] = "County"
+  colnames(ct_scraper)[5] = "Location"
+  colnames(ct_scraper)[6] = "Location 2"
+  colnames(ct_scraper)[7] = "Location 3"
+  colnames(ct_scraper)[8] = "Latitude"
+  colnames(ct_scraper)[9] = "Longitude"
+  colnames(ct_scraper)[10] = "Precipitation"
+  colnames(ct_scraper)[11] = "Inches"
+  colnames(ct_scraper)[12] = "Unit"
+  colnames(ct_scraper)[13] = "Method"
+  colnames(ct_scraper)[14] = "Measurement"
+  
+  # Format date
+  ct_scraper$Date <- as.Date(ct_scraper$Date , format = "%m/%d/%Y")
+  
+  # Add day of week
+  ct_scraper$`Day reported` <- weekdays(ct_scraper$Date) 
+  
+  # Format time
+  ct_scraper$Time <- sub("^([0-9]{3}) ", "0\\1 ", ct_scraper$Time)
+  ct_scraper$Time <- strptime(ct_scraper$Time, format = "%I%M %p")
+  ct_scraper$Time <- strftime(ct_scraper$Time, format = "%I:%M %p")
+  ct_scraper$Time <- sub("^0", "", ct_scraper$Time)
+  ct_scraper$Time <- gsub("AM", "a.m.", ct_scraper$Time)
+  ct_scraper$Time <- gsub("PM", "p.m.", ct_scraper$Time)
+  
+  # Concatenate day and time
+  ct_scraper$Reported <- paste(ct_scraper$`Day reported`, ct_scraper$Time)
+  
+  # Format daily dates and times
+  ct_scraper$`Daily date` <- format(as.Date(ct_scraper$Date, "%Y-%m-%d"), "%b. %d")
+  ct_scraper$`Date reported` <- paste(ct_scraper$`Daily date`, "at", ct_scraper$Time)
+  
+  # Filter for state
+  ct_scraper <- ct_scraper %>% 
+    filter(!is.na(State) & (State == "CT"))
+  
+  # Move inches to end
+  ct_scraper <- select(ct_scraper, Date, Time, State, County, Location, `Location 2`, `Location 3`, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Reported,`Daily date`, `Date reported`, Inches, Unit)
+  
+  # Trim numbers after location name
+  ct_scraper$Location <- sub("\\d.*", "", ct_scraper$Location)
+  
+  
+  # Extract text before <a and after word= but before the next "
+
+  
+  # Create daily dataset
+  ct_snow_daily_temp <- ct_scraper %>% 
+    filter(Measurement == "24-hourly Snowfall")
+  
+  # Create storm total dataset
+  ct_snow_storm_temp <- ct_scraper %>% 
+    filter(Measurement == "Storm Total Snow")
+  
+  # Create daily rainfall dataset
+  ct_rain_daily_temp <- ct_scraper %>% 
+    filter(Measurement == "24-hourly Rainfall")
+  
+  # Create storm rainfall total dataset
+  ct_rain_storm_temp <- ct_scraper %>% 
+    filter(Measurement == "Storm Total Rainfall")
+  
+  # Combine data
+  ct_snow_daily <- rbind(ct_snow_daily, ct_snow_daily_temp)
+  ct_snow_storm <- rbind(ct_snow_storm, ct_snow_storm_temp)
+  ct_rain_daily <- rbind(ct_rain_daily, ct_rain_daily_temp)
+  ct_rain_storm <- rbind(ct_rain_storm, ct_rain_storm_temp)
+}
+
+
+# Export ----
+
+# Check if blank
+if (nrow(ct_snow_storm)) {
+# Export snow storm data to Google Sheet
+  sheet_write(ct_snow_storm, ss = "https://docs.google.com/spreadsheets/d/1YDLQYb19d8jmqnuGx6NdWVh4h5JgolmKFBsEKwGulPM/edit?usp=sharing", sheet = "snow_storm")
+  print("Exported snow storm data")
+} else {
+  print("Snow storm data is blank")
+}
+
+# Check if blank
+if (nrow(ct_snow_daily)) {
+# Export daily snow data to Google Sheet
+  sheet_write(ct_snow_daily, ss = "https://docs.google.com/spreadsheets/d/1YDLQYb19d8jmqnuGx6NdWVh4h5JgolmKFBsEKwGulPM/edit?usp=sharing", sheet = "snow_daily")
+  print("Exported daily snow data")
+} else {
+  print("Daily snow data is blank")
+}
+
+# Check if blank
+if (nrow(ct_rain_storm)) {
+# Export rain storm data to Google Sheet
+  sheet_write(ct_rain_storm, ss = "https://docs.google.com/spreadsheets/d/1YDLQYb19d8jmqnuGx6NdWVh4h5JgolmKFBsEKwGulPM/edit?usp=sharing", sheet = "rain_storm")
+  print("Exported rain storm data")
+} else {
+  print("Rain storm data is blank")
+}
+
+# Check if blank
+if (nrow(ct_rain_daily)) {
+# Export daily rain data to Google Sheet
+  sheet_write(ct_rain_daily, ss = "https://docs.google.com/spreadsheets/d/1YDLQYb19d8jmqnuGx6NdWVh4h5JgolmKFBsEKwGulPM/edit?usp=sharing", sheet = "rain_daily")
+  print("Exported daily rain data")
+} else {
+  print("Daily rain data is blank")
+}
+
+
 # Schedule locally with Launchd (Mac) ----
 
 # Save as .plist:

@@ -113,17 +113,41 @@ rain_storm <- scraper %>%
 # Authorize
 gs4_auth("alexandra.harris@timesunion.com")
 
+# Check if blank
+if (nrow(snow_storm)) {
 # Export snow storm data to Google Sheet
-sheet_write(snow_storm, ss = "link", sheet = "snow_storm")
+  sheet_write(snow_storm, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "snow_storm")
+  print("Exported snow storm data")
+} else {
+  print("Snow storm data is blank")
+}
 
+# Check if blank
+if (nrow(snow_daily)) {
 # Export daily snow data to Google Sheet
-sheet_write(snow_daily, ss = "link", sheet = "snow_daily")
+  sheet_write(snow_daily, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "snow_daily")
+  print("Exported daily snow data")
+} else {
+  print("Daily snow data is blank")
+}
 
+# Check if blank
+if (nrow(rain_storm)) {
 # Export rain storm data to Google Sheet
-sheet_write(rain_storm, ss = "link", sheet = "rain_storm")
+  sheet_write(rain_storm, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "rain_storm")
+  print("Exported rain storm data")
+} else {
+  print("Rain storm data is blank")
+}
 
+# Check if blank
+if (nrow(rain_daily)) {
 # Export daily rain data to Google Sheet
-sheet_write(rain_daily, ss = "link", sheet = "rain_daily")
+  sheet_write(rain_daily, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "rain_daily")
+  print("Exported daily rain data")
+} else {
+  print("Daily rain data is blank")
+}
 
 
 # Schedule with Launchd (Mac) ----

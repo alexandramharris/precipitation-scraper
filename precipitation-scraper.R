@@ -110,8 +110,14 @@ rain_storm <- scraper %>%
   
 # Export ----
 
-# Authorize
-gs4_auth("alexandra.harris@timesunion.com")
+# Authorize locally
+# gs4_auth("alexandra.harris@timesunion.com")
+
+# Authorize for actions
+source("functions/func_auth_google.R")          
+auth_google(email = "alexandra.harris@timesunion.com",
+            service = "gsheet_precipitation",
+            token_path = ".secret/gsheet_precipitation")
 
 # Check if blank
 if (nrow(snow_storm)) {
@@ -150,7 +156,7 @@ if (nrow(rain_daily)) {
 }
 
 
-# Schedule with Launchd (Mac) ----
+# Schedule locally with Launchd (Mac) ----
 
 # Save as .plist:
   # <?xml version="1.0" encoding="UTF-8"?>

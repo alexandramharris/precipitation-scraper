@@ -1,5 +1,5 @@
 # precipitation-scraper
 
-<p>Scrapes snowfall data for Capital Region and Hudson Valley area. Links to a Google Sheet used to power Datawrapper graphics.</p>
+<p>Scrapes snowfall and rainfall data for Capital Region and Hudson Valley areas. Links to a Google Sheet used to power Datawrapper and MapLibre graphics.</p>
 
-<p>Added version for Connecticut market. And now also scraping rainfall!</p>
+<p>Added version for Connecticut market.</p>

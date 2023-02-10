@@ -14,6 +14,8 @@ library(lubridate)
 library(tokencodr)
 
 
+# New York version ----
+
 # Scraper ----
 
 # Read webpage
@@ -108,7 +110,14 @@ rain_daily <- scraper %>%
 rain_storm <- scraper %>% 
   filter(Measurement == "Storm Total Rainfall")
 
-  
+# Create peak wind gust dataset
+peak_wind_gust <- scraper %>% 
+  filter(Measurement == "Peak Wind Gust")
+
+# Rename inches to Number
+colnames(peak_wind_gust)[17] = "Number"
+
+
 # Export ----
 
 # Authorize locally
@@ -148,6 +157,15 @@ if (nrow(rain_storm)) {
 }
 
 # Check if blank
+if (nrow(peak_wind_gust)) {
+  # Export rain storm data to Google Sheet
+  sheet_write(peak_wind_gust, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "peak_wind_gust")
+  print("Exported peak wind gust data")
+} else {
+  print("Peak wind gust data is blank")
+}
+
+# Check if blank
 if (nrow(rain_daily)) {
 # Export daily rain data to Google Sheet
   sheet_write(rain_daily, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "rain_daily")
@@ -155,6 +173,7 @@ if (nrow(rain_daily)) {
 } else {
   print("Daily rain data is blank")
 }
+
 
 
 

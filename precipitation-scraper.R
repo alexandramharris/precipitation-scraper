@@ -287,11 +287,11 @@ for(i in 1:length(links)){
     filter(Measurement == "Storm Total Snow")
   
   # Create daily rainfall dataset
-  ct_rain_daily <- ct_scraper %>% 
+  ct_rain_daily_temp <- ct_scraper %>% 
     filter(Measurement == "24-hourly Rainfall" || Measurement == "24 hour rainfall")
   
   # Create daily rainfall dataset
-  ct_rain_daily <- ct_scraper %>% 
+  ct_rain_daily_temp <- ct_scraper %>% 
     filter(Measurement == "24-hourly Rainfall" || Measurement ==  "24 hour rainfall")
   
   # Combine data

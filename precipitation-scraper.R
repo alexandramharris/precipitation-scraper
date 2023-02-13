@@ -199,6 +199,9 @@ ct_rain_storm <- data.frame()
 
 # Iterate over source links
 for(i in 1:length(links)){
+   # Read webpage
+  ct_webpage <- read_html(links[i])
+  
   # Select element
   ct_metadata_nodes <- html_nodes(ct_webpage, "pre.glossaryProduct")
   

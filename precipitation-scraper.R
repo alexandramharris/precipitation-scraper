@@ -157,15 +157,6 @@ if (nrow(rain_storm)) {
 }
 
 # Check if blank
-if (nrow(peak_wind_gust)) {
-  # Export rain storm data to Google Sheet
-  sheet_write(peak_wind_gust, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "peak_wind_gust")
-  print("Exported peak wind gust data")
-} else {
-  print("Peak wind gust data is blank")
-}
-
-# Check if blank
 if (nrow(rain_daily)) {
 # Export daily rain data to Google Sheet
   sheet_write(rain_daily, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "rain_daily")
@@ -174,7 +165,14 @@ if (nrow(rain_daily)) {
   print("Daily rain data is blank")
 }
 
-
+# Check if blank
+if (nrow(peak_wind_gust)) {
+  # Export rain storm data to Google Sheet
+  sheet_write(peak_wind_gust, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "peak_wind_gust")
+  print("Exported peak wind gust data")
+} else {
+  print("Peak wind gust data is blank")
+}
 
 
 # Connecticut version ----
@@ -201,17 +199,17 @@ ct_rain_storm <- data.frame()
 
 # Iterate over source links
 for(i in 1:length(links)){
-  # Read webpage
-  ct_webpage <- read_html(links[i])
-  
   # Select element
   ct_metadata_nodes <- html_nodes(ct_webpage, "pre.glossaryProduct")
   
-  # Trim as text
-  ct_metadata_text <- str_trim(ct_metadata_nodes)
+  # Extract text from href -- we just need to add this
+  ct_text <- html_text(ct_metadata_nodes)
+  
+  # Trim text
+  ct_metadata_text <- str_trim(ct_text)
   
   # Convert to dataframe
-  ct_metadata_df <- as.data.frame(ct_metadata_text)
+  ct_metadata_df <- data.frame(ct_metadata_text)
   
   # Extract below metadata text only
   ct_metadata <- as.data.frame(gsub(".*\\*\\*\\*\\*\\*METADATA\\*\\*\\*\\*\\*", "", ct_metadata_df$ct_metadata_text))
@@ -277,10 +275,6 @@ for(i in 1:length(links)){
   # Trim numbers after location name
   ct_scraper$Location <- sub("\\d.*", "", ct_scraper$Location)
   
-  
-  # Extract text before <a and after word= but before the next "
-
-  
   # Create daily dataset
   ct_snow_daily_temp <- ct_scraper %>% 
     filter(Measurement == "24-hourly Snowfall")
@@ -290,12 +284,12 @@ for(i in 1:length(links)){
     filter(Measurement == "Storm Total Snow")
   
   # Create daily rainfall dataset
-  ct_rain_daily_temp <- ct_scraper %>% 
-    filter(Measurement == "24-hourly Rainfall")
+  ct_rain_daily <- ct_scraper %>% 
+    filter(Measurement == "24-hourly Rainfall" || Measurement == "24 hour rainfall")
   
-  # Create storm rainfall total dataset
-  ct_rain_storm_temp <- ct_scraper %>% 
-    filter(Measurement == "Storm Total Rainfall")
+  # Create daily rainfall dataset
+  ct_rain_daily <- ct_scraper %>% 
+    filter(Measurement == "24-hourly Rainfall" || "24 hour rainfall")
   
   # Combine data
   ct_snow_daily <- rbind(ct_snow_daily, ct_snow_daily_temp)
@@ -342,6 +336,7 @@ if (nrow(ct_rain_daily)) {
 } else {
   print("Daily rain data is blank")
 }
+
 
 
 # Schedule locally with Launchd (Mac) ----

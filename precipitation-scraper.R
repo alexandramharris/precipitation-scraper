@@ -117,6 +117,17 @@ peak_wind_gust <- scraper %>%
 # Rename inches to Number
 colnames(peak_wind_gust)[17] = "Number"
 
+# Create ice storm accrual dataset
+ice_storm <- scraper %>% 
+  filter(Measurement == "Storm Total Ice Accrual")
+
+# Rename T to Trace
+ice_storm$Inches[ice_storm$Inches == "T"] <- "Trace"
+
+# Create a value for trace to work on legend
+ice_storm <- ice_storm %>% 
+  mutate(Legend = ifelse(Inches == "Trace", 0.01, Inches))
+
 
 # Export ----
 
@@ -172,6 +183,15 @@ if (nrow(peak_wind_gust)) {
   print("Exported peak wind gust data")
 } else {
   print("Peak wind gust data is blank")
+}
+
+# Check if blank
+if (nrow(ice_storm)) {
+  # Export ice storm data to Google Sheet
+  sheet_write(ice_storm, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "ice_storm")
+  print("Exported ice storm data")
+} else {
+  print("Ice storm data is blank")
 }
 
 

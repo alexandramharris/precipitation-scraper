@@ -207,7 +207,7 @@ if (nrow(ice_storm)) {
 # Scraper ----
 
 # Set source links
-links <- c("https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=CI&version=2&glossary=1&highlight=off", 
+links <- c("https://forecast.weather.gov/product.php?site=NWS&issuedby=ALY&product=PNS&format=CI&version=1&glossary=1&highlight=off", 
            "https://forecast.weather.gov/product.php?site=NWS&issuedby=OKX&product=PNS&format=ci&version=1&glossary=1&highlight=off", 
            "https://forecast.weather.gov/product.php?site=NWS&issuedby=BOX&product=PNS&format=ci&version=1&glossary=1&highlight=off")
 

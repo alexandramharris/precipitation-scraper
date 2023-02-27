@@ -304,7 +304,7 @@ for(i in 1:length(links)){
   
   # Create storm total dataset
   ct_snow_storm_temp <- ct_scraper %>% 
-    filter(Measurement == "Storm Total Snow" || Measurement == "STORM TOTAL SNOWFALL")
+    filter(Measurement == "Storm Total Snow" || Measurement == "STORM TOTAL SNOWFALL" || Measurement == "Storm total snowfall")
   
   # Create daily rainfall dataset
   ct_rain_daily_temp <- ct_scraper %>% 

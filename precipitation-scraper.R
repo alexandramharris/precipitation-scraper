@@ -296,7 +296,7 @@ for(i in 1:length(links)){
   ct_scraper <- select(ct_scraper, Date, Time, State, County, Location, `Location 2`, `Location 3`, Latitude, Longitude, Precipitation, Method, Measurement, `Day reported`, Reported,`Daily date`, `Date reported`, Inches, Unit)
   
   # Trim numbers after location name
-  ct_scraper$Location <- sub("\\d.*", "", ct_scraper$Location)
+  ct_scraper$Location <- sub("^(0-9)+ (NESW)+", "", ct_scraper$Location)
   
   # Create daily dataset
   ct_snow_daily_temp <- ct_scraper %>% 

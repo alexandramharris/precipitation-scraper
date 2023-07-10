@@ -106,6 +106,10 @@ snow_storm <- scraper %>%
 rain_daily <- scraper %>% 
   filter(Measurement == "24-hourly Rainfall")
 
+# Create 12-hour rainfall dataset
+rain_12 <- scraper %>% 
+  filter(Measurement == "12-hourly Rainfall")
+
 # Create storm rainfall total dataset
 rain_storm <- scraper %>% 
   filter(Measurement == "Storm Total Rainfall")
@@ -174,6 +178,15 @@ if (nrow(rain_daily)) {
   print("Exported daily rain data")
 } else {
   print("Daily rain data is blank")
+}
+
+# Check if blank
+if (nrow(rain_12)) {
+  # Export daily rain data to Google Sheet
+  sheet_write(rain_12, ss = "https://docs.google.com/spreadsheets/d/1zjPTqwk-SM18CNr0JbEKVj8Ez6ZnifRpXUy8DYAvuPM/edit#gid=1787663814", sheet = "rain_12")
+  print("Exported 12-hour rain data")
+} else {
+  print("12-hour rain data is blank")
 }
 
 # Check if blank

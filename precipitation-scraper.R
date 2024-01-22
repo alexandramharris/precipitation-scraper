@@ -373,36 +373,3 @@ if (nrow(ct_rain_daily)) {
 } else {
   print("Daily rain data is blank")
 }
-
-
-
-# Schedule locally with Launchd (Mac) ----
-
-# Save as .plist:
-  # <?xml version="1.0" encoding="UTF-8"?>
-  # <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-  # <plist version="1.0">
-  # <dict>
-  # <key>Label</key>
-  # <string>com.nws-snowfall-scraper</string>
-  # <key>ProgramArguments</key>
-  # <array>
-  # <string>/usr/local/bin/Rscript</string>
-  # <string>/Users/PATH HERE</string>
-  # </array>
-  # <key>StartInterval</key>
-  # <integer>60</integer>
-  # <key>KeepAlive</key>
-  # <true/>
-  # <key>PowerType</key>
-  # <string>ACPower</string>
-  # </dict>
-  # </plist>
-
-# Save to /Libary/LaunchDaemons
-
-# Run in terminal:
-  # sudo launchctl load /Library/LaunchDaemons/com.nws-snowfall-scraper.plist
-
-# Check:
-  # launchctl list
